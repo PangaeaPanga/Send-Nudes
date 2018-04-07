@@ -1,5 +1,23 @@
+load:
+	LDA #$01				;\ Player can carry Yoshi over levels flag. #$00 = can't carry over levels; #$01 = can carry over levels.
+	STA $0DC1				;/
+	LDA #$06				;\ Yoshi color. #$04=yellow; #$06=blue; #$08=red; #$0A=green. Refreshes on level change.
+	STA $13C7				;/ Mario Starts with (Blue) Yoshi.
+	RTL
+
+	
 main:
-	LDX #$0B
+	STZ $1697				; Disable consecutive hit combo.
+	LDA $18AC				; \ Check to see if Yoshi is eating something.
+	CMP #$FF				; /
+	BNE Continue			; If not, then continue.
+	
+	SetSwallow:
+	LDA #$26				; \ Set the swallow timer to a smaller number.
+	STA $18AC				; /
+	
+	Continue:
+	LDX #$0B				; Loop through every sprite slot.
 	
 	Loop:
 	LDA $9E,x				; \ 
@@ -15,18 +33,6 @@ main:
 	
 	MakeFly:
 	STZ $AA,x				; Set Yoshi's Y-speed to 0.
-	
-	LDA $76
-	BEQ Left
-	
-	Right:
-	LDA #$10				; \ Set the sprite's x position to 16.
-	STA $B6,x				; /
-	RTL
-	
-	Left:
-	LDA #$F0				; \ Set the sprite's x position to 16.
-	STA $B6,x				; /
 	
 	Return:
 	RTL
