@@ -34,7 +34,8 @@ pswitchTimer:
 	STA !timer10			; /
 	
 	Active:					; Blue P-Switch is active.
-	LDA $13D4				; \ If the game is paused, then return.
+	LDA $13D4				; \ 
+	ORA $71					; | If the game is paused, then return.
 	BNE Return				; /
 	LDA !timer10			; \ Draw the 10s digit in the status bar.
 	STA $0F25				; /
